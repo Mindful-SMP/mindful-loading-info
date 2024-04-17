@@ -97,7 +97,7 @@ public class PreLaunch implements PreLaunchEntrypoint {
                 }
             }
             // Now you can close the loading window
-            SwingUtilities.invokeLater(() -> loadingFrame.dispose());
+            SwingUtilities.invokeLater(loadingFrame::dispose);
         }).start();
     }
 
