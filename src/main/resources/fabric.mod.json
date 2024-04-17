@@ -1,29 +1,29 @@
 {
 	"schemaVersion": 1,
-	"id": "mindful-loading-window",
+	"id": "mindful-loading-info",
 	"version": "${version}",
-	"name": "Mindful Loading Window",
+	"name": "Mindful Loading Info",
 	"description": "Pre Minecraft splash screen loading window, shows an AWT loading screen until the game finishes initializing.",
 	"authors": [
 		"Lautner"
 	],
 	"contact": {
-		"homepage": "https://github.com/Iautner/mindful-loading-window",
-		"sources": "https://github.com/Iautner/mindful-loading-window"
+		"homepage": "https://github.com/Iautner/mindful-loading-info",
+		"sources": "https://github.com/Iautner/mindful-loading-info"
 	},
 	"license": "MIT",
-	"icon": "assets/mindful-loading-window/icon.png",
+	"icon": "assets/mindful-loading-info/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.lautner.mindful_loading_window.Initializer"
+			"com.lautner.mindful_loading_info.Initializer"
 		],
 		"preLaunch": [
-			"com.lautner.mindful_loading_window.PreLaunch"
+			"com.lautner.mindful_loading_info.PreLaunch"
 		]
 	},
 	"mixins": [
-		"mindful-loading-window.mixins.json"
+		"mindful-loading-info.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.15.0",
