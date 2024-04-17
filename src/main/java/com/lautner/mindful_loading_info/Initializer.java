@@ -20,7 +20,7 @@ public class Initializer implements ModInitializer {
             PreLaunch.frame.ifPresent((frame) -> {
                 frame.setVisible(false);
                 frame.dispose();
-                preLaunch.frame = Optional.empty(); // Use preLaunch instead of PreLaunch
+                PreLaunch.frame = Optional.empty(); // Use preLaunch instead of PreLaunch
             });
         });
     }
