@@ -8,6 +8,8 @@ import java.util.Optional;
 // Add import statement for PreLaunch class
 import com.lautner.mindful_loading_info.PreLaunch;
 
+import javax.swing.*;
+
 public class Initializer implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("loading-window");
 
@@ -17,10 +19,10 @@ public class Initializer implements ModInitializer {
     public void onInitialize() {
         WindowOpenListener.getListeners().add(() -> {
             PreLaunch preLaunch = new PreLaunch(); // Initialize PreLaunch instance
-            PreLaunch.frame.ifPresent((frame) -> {
+            PreLaunch.getFrame().ifPresent((frame) -> {
                 frame.setVisible(false);
                 frame.dispose();
-                PreLaunch.frame = Optional.empty(); // Use preLaunch instead of PreLaunch
+                PreLaunch.setFrame(new JFrame());// Use preLaunch instead of PreLaunch
             });
         });
     }
