@@ -11,9 +11,11 @@ import java.awt.event.ComponentEvent;
 import java.net.URL;
 import java.util.Optional;
 
+import static java.lang.Thread.sleep;
+
 public class PreLaunch implements PreLaunchEntrypoint {
-    public static Optional<JFrame> frame = Optional.empty();
-    public static Logger LOGGER = LoggerFactory.getLogger("loading-window");
+    private static JFrame frame = new JFrame();
+    private static Logger LOGGER = LoggerFactory.getLogger("loading-window");
     private Timer memoryUpdateTimer;
     private boolean minecraftWindowVisible = false;
 
@@ -63,7 +65,7 @@ public class PreLaunch implements PreLaunchEntrypoint {
         loadingFrame.pack();
         loadingFrame.setLocationRelativeTo(null);
         loadingFrame.setVisible(true);
-        frame = Optional.of(loadingFrame);
+        setFrame(loadingFrame);
         mainPanel.add(memoryInfoLabel, BorderLayout.SOUTH);
         JTextArea fabricLoadingStateTextArea = new JTextArea();
         fabricLoadingStateTextArea.setEditable(false);
@@ -82,7 +84,7 @@ public class PreLaunch implements PreLaunchEntrypoint {
         new Thread(() -> {
             for (int i = 0; i < 100; i++) {
                 try {
-                    Thread.sleep(50); // Adjusted to update more frequently
+                    sleep(50); // Adjusted to update more frequently
                     progressBar.setValue(i); // Update progress bar value
                 } catch (InterruptedException ex) {
                     LOGGER.error("Thread sleep interrupted", ex);
@@ -91,7 +93,7 @@ public class PreLaunch implements PreLaunchEntrypoint {
             // Wait for the Minecraft window to become visible before closing the loading window
             while (!minecraftWindowVisible) {
                 try {
-                    Thread.sleep(1000); // Check every second
+                    sleep(1000); // Check every second
                 } catch (InterruptedException ex) {
                     LOGGER.error("Thread sleep interrupted", ex);
                 }
@@ -119,6 +121,18 @@ public class PreLaunch implements PreLaunchEntrypoint {
     public void onShutdown() {
         if (this.memoryUpdateTimer != null && this.memoryUpdateTimer.isRunning()) {
             this.memoryUpdateTimer.stop();
+        }
+    }
+
+    public static Optional<JFrame> getFrame() {
+        return frame;
+    }
+
+    public static void setFrame(JFrame loadingFrame) {
+        if (loadingFrame != null) {
+            frame = Optional.of(loadingFrame);
+        } else {
+            frame = Optional.empty();
         }
     }
 }
