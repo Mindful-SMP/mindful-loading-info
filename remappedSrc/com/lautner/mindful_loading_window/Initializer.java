@@ -1,4 +1,4 @@
-package com.lautner.mindful_loading_window;
+package com.lautner.mindful_loading_info;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
