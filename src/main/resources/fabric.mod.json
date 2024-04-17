@@ -3,7 +3,7 @@
 	"id": "mindful-loading-info",
 	"version": "${version}",
 	"name": "Mindful Loading Info",
-	"description": "Pre Minecraft splash screen loading window, shows an AWT loading screen until the game finishes initializing.",
+	"description": "Adds a small loading window with memory info before Minecraft fully opens.",
 	"authors": [
 		"Lautner"
 	],
