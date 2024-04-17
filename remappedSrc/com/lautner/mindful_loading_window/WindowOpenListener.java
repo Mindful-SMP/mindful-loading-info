@@ -1,4 +1,4 @@
-package com.lautner.mindful_loading_window;
+package com.lautner.mindful_loading_info;
 
 import java.util.LinkedList;
 import java.util.List;
