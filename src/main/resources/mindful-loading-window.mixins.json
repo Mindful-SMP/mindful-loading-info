@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "com.lautner.mindful_loading_window.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"GLFWMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
