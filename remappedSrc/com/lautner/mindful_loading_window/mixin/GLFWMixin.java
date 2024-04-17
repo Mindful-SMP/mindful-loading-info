@@ -1,4 +1,4 @@
-package com.lautner.mindful_loading_window.mixin;
+package com.lautner.mindful_loading_info.mixin;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.system.NativeType;
@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.lautner.mindful_loading_window.WindowOpenListener;
+import com.lautner.mindful_loading_info.WindowOpenListener;
 
 // I know this is BAAAD but it's the only way I can think to get notified when the window is created regardless of MC version.
 @Mixin(GLFW.class)
