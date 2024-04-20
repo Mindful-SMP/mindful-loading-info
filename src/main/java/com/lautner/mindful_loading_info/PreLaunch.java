@@ -14,7 +14,7 @@ import java.util.Optional;
 import static javax.swing.UIManager.*;
 
 public class PreLaunch implements PreLaunchEntrypoint {
-    static Optional<Object> frame = null;
+    static Optional<JFrame> frame = Optional.empty();
     private static final Logger LOGGER = LoggerFactory.getLogger("loading-window");
     private Timer memoryUpdateTimer;
     private boolean minecraftWindowVisible = false;
