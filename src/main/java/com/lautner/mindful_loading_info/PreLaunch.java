@@ -11,47 +11,49 @@ import java.awt.event.ComponentEvent;
 import java.net.URL;
 import java.util.Optional;
 
+import static javax.swing.UIManager.*;
+
 public class PreLaunch implements PreLaunchEntrypoint {
-    public static Optional<JFrame> frame = Optional.empty();
-    public static Logger LOGGER = LoggerFactory.getLogger("loading-window");
+    static Optional<JFrame> frame = Optional.empty();
+    private static final Logger LOGGER = LoggerFactory.getLogger("loading-window");
     private Timer memoryUpdateTimer;
     private boolean minecraftWindowVisible = false;
-
-    public PreLaunch() {
-    }
 
     private static boolean isMac() {
         String os = System.getProperty("os.name").toLowerCase();
         return os.contains("mac");
     }
 
+    @Override
     public void onPreLaunch() {
         if (isMac()) {
-            LOGGER.warn("Cannot open loading window on Mac due to OS limitations regarding AWT.");
+            LOGGER.warn("Cannot open loading window on MacOS due to limitations regarding Java AWT.");
         } else {
             try {
                 JLabel memoryInfoLabel = new JLabel();
                 this.createAndShowUI(memoryInfoLabel);
                 this.startMemoryUpdateTimer(memoryInfoLabel);
-            } catch (Exception var2) {
-                LOGGER.error("Unable to show loading screen.", var2.getMessage());
+            } catch (Exception e) {
+                LOGGER.error("Unable to show loading screen.", e);
             }
         }
     }
 
     private void createAndShowUI(JLabel memoryInfoLabel) throws Exception {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        setLookAndFeel(getSystemLookAndFeelClassName());
         JFrame loadingFrame = new JFrame("Minecraft");
-        loadingFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Prevent default close operation
+        loadingFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         loadingFrame.setResizable(false);
         URL iconUrl = this.getClass().getResource("/assets/loading-icon/icon.png");
 
-        assert iconUrl != null;
+        if (iconUrl == null) {
+            throw new Exception("Icon URL is null");
+        }
 
         ImageIcon icon = new ImageIcon(iconUrl);
         loadingFrame.setIconImage(icon.getImage());
         JProgressBar progressBar = new JProgressBar();
-        progressBar.setIndeterminate(false);
+        progressBar.setIndeterminate(true);
         progressBar.setPreferredSize(new Dimension(256, 40));
         JPanel mainPanel = new JPanel();
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -80,7 +82,7 @@ public class PreLaunch implements PreLaunchEntrypoint {
 
         // Start a thread to simulate loading progress
         new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i <= 100; i++) {
                 try {
                     Thread.sleep(50); // Adjusted to update more frequently
                     progressBar.setValue(i); // Update progress bar value
@@ -97,7 +99,7 @@ public class PreLaunch implements PreLaunchEntrypoint {
                 }
             }
             // Now you can close the loading window
-            SwingUtilities.invokeLater(() -> loadingFrame.dispose());
+            SwingUtilities.invokeLater(loadingFrame::dispose);
         }).start();
     }
 
@@ -106,13 +108,13 @@ public class PreLaunch implements PreLaunchEntrypoint {
         long totalMemory = Runtime.getRuntime().totalMemory();
         long usedMemory = totalMemory - Runtime.getRuntime().freeMemory();
         String memoryText = String.format("Memory: %dMB/%dMB", usedMemory / 1048576L, maxMemory / 1048576L);
-        Color aquaColor = new Color(0,153,255);
-        memoryInfoLabel.setForeground(Color.getColor(String.valueOf(aquaColor)));
+        Color aquaColor = new Color(0, 153, 255);
+        memoryInfoLabel.setForeground(aquaColor);
         memoryInfoLabel.setText(memoryText);
     }
 
     private void startMemoryUpdateTimer(JLabel memoryInfoLabel) {
-        this.memoryUpdateTimer = new Timer(1000, (e) -> this.updateMemoryInfoLabel(memoryInfoLabel));
+        this.memoryUpdateTimer = new Timer(1000, e -> this.updateMemoryInfoLabel(memoryInfoLabel));
         this.memoryUpdateTimer.start();
     }
 
