@@ -41,38 +41,44 @@ public class PreLaunch implements PreLaunchEntrypoint {
 
     private void createAndShowUI(JLabel memoryInfoLabel) throws Exception {
         setLookAndFeel(getSystemLookAndFeelClassName());
+
         JFrame loadingFrame = new JFrame("Minecraft");
         loadingFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         loadingFrame.setResizable(false);
-        URL iconUrl = this.getClass().getResource("/assets/loading-icon/icon.png");
 
+        URL iconUrl = getClass().getResource("/assets/loading-icon/icon.png");
         if (iconUrl == null) {
             throw new Exception("Icon URL is null");
         }
 
         ImageIcon icon = new ImageIcon(iconUrl);
         loadingFrame.setIconImage(icon.getImage());
+
         JProgressBar progressBar = new JProgressBar();
         progressBar.setIndeterminate(true);
         progressBar.setPreferredSize(new Dimension(256, 40));
+
         JPanel mainPanel = new JPanel();
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setLayout(new BorderLayout());
+
         JLabel loadingLabel = new JLabel("Loading Mindful Optimized...");
         mainPanel.add(loadingLabel, BorderLayout.NORTH);
         mainPanel.add(progressBar, BorderLayout.CENTER);
+        mainPanel.add(memoryInfoLabel, BorderLayout.SOUTH);
+
+        JTextArea fabricLoadingStateTextArea = new JTextArea();
+        fabricLoadingStateTextArea.setEditable(false);
+        mainPanel.add(new JScrollPane(fabricLoadingStateTextArea), BorderLayout.EAST);
+
         loadingFrame.setContentPane(mainPanel);
         loadingFrame.pack();
         loadingFrame.setLocationRelativeTo(null);
         loadingFrame.setVisible(true);
         frame = Optional.of(loadingFrame);
-        mainPanel.add(memoryInfoLabel, BorderLayout.SOUTH);
-        JTextArea fabricLoadingStateTextArea = new JTextArea();
-        fabricLoadingStateTextArea.setEditable(false);
-        mainPanel.add(new JScrollPane(fabricLoadingStateTextArea), BorderLayout.EAST);
+
         updateMemoryInfoLabel(memoryInfoLabel);
 
-        // Listen for the Minecraft Java window visibility
         loadingFrame.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -80,25 +86,24 @@ public class PreLaunch implements PreLaunchEntrypoint {
             }
         });
 
-        // Start a thread to simulate loading progress
         new Thread(() -> {
             for (int i = 0; i <= 100; i++) {
                 try {
-                    Thread.sleep(50); // Adjusted to update more frequently
-                    progressBar.setValue(i); // Update progress bar value
+                    Thread.sleep(50);
+                    progressBar.setValue(i);
                 } catch (InterruptedException ex) {
                     LOGGER.error("Thread sleep interrupted", ex);
                 }
             }
-            // Wait for the Minecraft window to become visible before closing the loading window
+
             while (!minecraftWindowVisible) {
                 try {
-                    Thread.sleep(1000); // Check every second
+                    Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     LOGGER.error("Thread sleep interrupted", ex);
                 }
             }
-            // Now you can close the loading window
+
             SwingUtilities.invokeLater(loadingFrame::dispose);
         }).start();
     }
