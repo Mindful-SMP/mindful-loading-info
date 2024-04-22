@@ -85,7 +85,6 @@ public class PreLaunch implements PreLaunchEntrypoint {
             }
         });
 
-        // Using Timer instead of Thread.sleep
         Timer timer = new Timer(50, new ActionListener() {
             int count = 0;
 
