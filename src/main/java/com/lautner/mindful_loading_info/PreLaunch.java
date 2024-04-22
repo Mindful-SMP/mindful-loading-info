@@ -6,12 +6,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.Optional;
 
-import static javax.swing.UIManager.*;
+import static javax.swing.UIManager.getSystemLookAndFeelClassName;
 
 public class PreLaunch implements PreLaunchEntrypoint {
     static Optional<JFrame> frame = Optional.empty();
@@ -32,7 +32,6 @@ public class PreLaunch implements PreLaunchEntrypoint {
             try {
                 JLabel memoryInfoLabel = new JLabel();
                 this.createAndShowUI(memoryInfoLabel);
-                this.startMemoryUpdateTimer(memoryInfoLabel);
             } catch (Exception e) {
                 LOGGER.error("Unable to show loading screen.", e);
             }
@@ -40,7 +39,7 @@ public class PreLaunch implements PreLaunchEntrypoint {
     }
 
     private void createAndShowUI(JLabel memoryInfoLabel) throws Exception {
-        setLookAndFeel(getSystemLookAndFeelClassName());
+        UIManager.setLookAndFeel(getSystemLookAndFeelClassName());
 
         JFrame loadingFrame = new JFrame("Minecraft");
         loadingFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -62,7 +61,7 @@ public class PreLaunch implements PreLaunchEntrypoint {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.setLayout(new BorderLayout());
 
-        JLabel loadingLabel = new JLabel("Loading Mindful Optimized...");
+        JLabel loadingLabel = new JLabel("Loading Minecraft...");
         mainPanel.add(loadingLabel, BorderLayout.NORTH);
         mainPanel.add(progressBar, BorderLayout.CENTER);
         mainPanel.add(memoryInfoLabel, BorderLayout.SOUTH);
@@ -79,33 +78,30 @@ public class PreLaunch implements PreLaunchEntrypoint {
 
         updateMemoryInfoLabel(memoryInfoLabel);
 
-        loadingFrame.addComponentListener(new ComponentAdapter() {
+        loadingFrame.addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
-            public void componentShown(ComponentEvent e) {
+            public void componentShown(java.awt.event.ComponentEvent e) {
                 minecraftWindowVisible = true;
             }
         });
 
-        new Thread(() -> {
-            for (int i = 0; i <= 100; i++) {
-                try {
-                    Thread.sleep(50);
-                    progressBar.setValue(i);
-                } catch (InterruptedException ex) {
-                    LOGGER.error("Thread sleep interrupted", ex);
+        // Using Timer instead of Thread.sleep
+        Timer timer = new Timer(50, new ActionListener() {
+            int count = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (count <= 100) {
+                    progressBar.setValue(count++);
+                } else if (!minecraftWindowVisible) {
+                    progressBar.setValue(100);
+                } else {
+                    loadingFrame.dispose();
+                    ((Timer) e.getSource()).stop();
                 }
             }
-
-            while (!minecraftWindowVisible) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    LOGGER.error("Thread sleep interrupted", ex);
-                }
-            }
-
-            SwingUtilities.invokeLater(loadingFrame::dispose);
-        }).start();
+        });
+        timer.start();
     }
 
     private void updateMemoryInfoLabel(JLabel memoryInfoLabel) {
@@ -118,14 +114,9 @@ public class PreLaunch implements PreLaunchEntrypoint {
         memoryInfoLabel.setText(memoryText);
     }
 
-    private void startMemoryUpdateTimer(JLabel memoryInfoLabel) {
-        this.memoryUpdateTimer = new Timer(1000, e -> this.updateMemoryInfoLabel(memoryInfoLabel));
-        this.memoryUpdateTimer.start();
-    }
-
     public void onShutdown() {
-        if (this.memoryUpdateTimer != null && this.memoryUpdateTimer.isRunning()) {
-            this.memoryUpdateTimer.stop();
+        if (memoryUpdateTimer != null && memoryUpdateTimer.isRunning()) {
+            memoryUpdateTimer.stop();
         }
     }
 }
