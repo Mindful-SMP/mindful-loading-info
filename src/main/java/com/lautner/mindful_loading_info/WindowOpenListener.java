@@ -1,12 +1,11 @@
 // Source code is decompiled from a .class file using FernFlower decompiler.
 package com.lautner.mindful_loading_info;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public final class WindowOpenListener {
-    private static final List<Runnable> listeners = new LinkedList();
+    private static final List<Runnable> listeners = new LinkedList<>();
 
     public WindowOpenListener() {
     }
@@ -16,10 +15,8 @@ public final class WindowOpenListener {
     }
 
     public static void trigger() {
-        Iterator var0 = listeners.iterator();
 
-        while(var0.hasNext()) {
-            Runnable l = (Runnable)var0.next();
+        for (Runnable l : listeners) {
             l.run();
         }
 

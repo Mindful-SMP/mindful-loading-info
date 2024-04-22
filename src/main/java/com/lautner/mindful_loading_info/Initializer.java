@@ -16,11 +16,11 @@ public class Initializer implements ModInitializer {
 
     public void onInitialize() {
         WindowOpenListener.getListeners().add(() -> {
-            PreLaunch preLaunch = new PreLaunch(); // Initialize PreLaunch instance
+            PreLaunch preLaunch = new PreLaunch();
             PreLaunch.frame.ifPresent((frame) -> {
                 frame.setVisible(false);
                 frame.dispose();
-                preLaunch.frame = Optional.empty(); // Use preLaunch instead of PreLaunch
+                PreLaunch.frame = Optional.empty();
             });
         });
     }
