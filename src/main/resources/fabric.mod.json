@@ -8,8 +8,9 @@
 		"Lautner"
 	],
 	"contact": {
-		"homepage": "https://github.com/Iautner/mindful-loading-info",
-		"sources": "https://github.com/Iautner/mindful-loading-info"
+		"homepage": "https://github.com/Iautner",
+		"sources": "https://github.com/Iautner/mindful-loading-info",
+		"issues": "https://github.com/Iautner/mindful-loading-info/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/mindful-loading-info/icon.png",
