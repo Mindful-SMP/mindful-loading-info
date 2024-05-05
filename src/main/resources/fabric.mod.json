@@ -3,7 +3,7 @@
 	"id": "mindful-loading-info",
 	"version": "${version}",
 	"name": "Mindful Loading Info",
-	"description": "Adds a small loading window with memory info before Minecraft fully opens.",
+	"description": "Loading screen with the loading progress of mods",
 	"authors": [
 		"Lautner"
 	],
@@ -15,23 +15,18 @@
 	"license": "MIT",
 	"icon": "assets/mindful-loading-info/icon.png",
 	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.lautner.mindful_loading_info.Initializer"
-		],
-		"preLaunch": [
-			"com.lautner.mindful_loading_info.PreLaunch"
-		]
-	},
-	"mixins": [
-		"mindful-loading-info.mixins.json"
-	],
 	"depends": {
-		"fabricloader": ">=0.15.0",
-		"fabric": "*",
-		"minecraft": ">=1.20.1"
+		"fabricloader": ">=0.14.0"
 	},
-	"suggests": {
-		"another-mod": "*"
+	"languageAdapters": {
+		"mindful-loading-info:totallyARealLanguageAdapter": "com.lautner.mindful_loading_info.ModLoadingScreen"
+	},
+	"entrypoints": {
+		"preLaunch": [
+			{
+				"adapter": "mindful-loading-info:totallyARealLanguageAdapter",
+				"value": ""
+			}
+		]
 	}
 }
