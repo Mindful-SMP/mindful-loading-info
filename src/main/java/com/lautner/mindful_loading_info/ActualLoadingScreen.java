@@ -148,7 +148,9 @@ public class ActualLoadingScreen {
 
         FlatMacDarkLaf.setup();
         UIManager.getDefaults().put("ProgressBar.horizontalSize", new Dimension(146, 18));
-        UIManager.getDefaults().put("ProgressBar.font", UIManager.getFont("ProgressBar.font").deriveFont(18f));
+        Font defaultFont = UIManager.getDefaults().getFont("ProgressBar.font");
+        Font resizedFont = defaultFont.deriveFont(Font.PLAIN, 18f);
+        UIManager.getDefaults().put("ProgressBar.font", resizedFont);
         UIManager.getDefaults().put("ProgressBar.selectionForeground", new Color(255, 255, 255));
 
         dialog = new JFrame();
@@ -224,7 +226,7 @@ public class ActualLoadingScreen {
         try (OutputStream os = Files.newOutputStream(configFile)) {
             configProperties.store(os,
                 "To use a custom background image, create a file named background.png in this folder. The recommended size is 960x540.\n" +
-                    "To use a custom icon image, create a file named icon.png in this folder. It should be square."
+                    "To use a custom icon image, create a file named icon.png in this folder. The recommended size is 256x256."
             );
         } catch (Exception e) {
             println("Failed to write config", e);
