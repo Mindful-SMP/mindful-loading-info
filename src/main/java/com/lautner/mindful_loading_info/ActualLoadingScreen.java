@@ -1,6 +1,7 @@
 package com.lautner.mindful_loading_info;
 
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+// import com.formdev.flatlaf.FlatDarkLaf;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
@@ -145,7 +146,7 @@ public class ActualLoadingScreen {
             return;
         }
 
-        FlatDarkLaf.setup();
+        FlatMacDarkLaf.setup();
         UIManager.getDefaults().put("ProgressBar.horizontalSize", new Dimension(146, 18));
         UIManager.getDefaults().put("ProgressBar.font", UIManager.getFont("ProgressBar.font").deriveFont(18f));
         UIManager.getDefaults().put("ProgressBar.selectionForeground", new Color(255, 255, 255));
